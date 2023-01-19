@@ -1,9 +1,18 @@
-export function setupCounter(element: HTMLButtonElement) {
-  let counter = 0
-  const setCounter = (count: number) => {
-    counter = count
-    element.innerHTML = `count is ${counter}`
-  }
-  element.addEventListener('click', () => setCounter(++counter))
-  setCounter(0)
+import Flow from './flow'
+import ConnectLine from './connectLine'
+import Rect from './rect'
+import Diamond from './diamond'
+import Trapezoidal from './Trapezoidal'
+import Round from './Round'
+import Ellipse from './Ellipse'
+import Terminator from './Terminator'
+export default{
+    Flow,
+    ConnectLine,
+    Rect,
+    Diamond,
+    Trapezoidal,
+    Round,
+    Ellipse,
+    Terminator
 }

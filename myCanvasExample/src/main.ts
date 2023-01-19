@@ -1,5 +1,5 @@
 import './style.css'
-import { FlowCanvas } from '../lib/flow'
+import FlowCanvas from '../lib/flow'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
@@ -7,7 +7,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </div>
 `
 const dom = document.getElementById('canvas');
-const canvas = new FlowCanvas(dom);
+const canvas = new FlowCanvas(dom as HTMLCanvasElement);
 await init();
 addEventListener("resize", async (event) => {
   canvas.handleResize(event)
@@ -47,4 +47,3 @@ async function init (){
 }
 
 
-// setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
