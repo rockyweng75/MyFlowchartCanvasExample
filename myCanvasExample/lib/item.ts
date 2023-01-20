@@ -8,6 +8,7 @@ export default abstract class Item implements IItem{
     height : number;
     text: string;
     id: string | number;
+    strokeStyle: string = "#0047b3";
     constructor(
         ctx: CanvasRenderingContext2D, 
         id: number | string, 

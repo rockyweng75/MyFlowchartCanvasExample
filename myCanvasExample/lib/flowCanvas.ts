@@ -2,10 +2,11 @@ import IItem from './iitem'
 import ConnectLine from './connectLine'
 import Rect from './rect'
 import Diamond from './diamond'
-import Trapezoidal from './Trapezoidal'
-import Round from './Round'
-import Ellipse from './Ellipse'
-import Terminator from './Terminator'
+import Trapezoidal from './trapezoidal'
+import Round from './round'
+import Ellipse from './ellipse'
+import Terminator from './terminator'
+import Triangle from './triangle'
 
 export default class FlowCanvas {
     canvas : HTMLCanvasElement;
@@ -73,7 +74,6 @@ export default class FlowCanvas {
         this.startX = e.clientX - this.offsetX + this.scrollX;
         this.startY = e.clientY - this.offsetY + this.scrollY;
         // set a flag indicating the drag has begun
-        console.log('mouseDown', this.startX, this.startY);
         this.isDown = true;
     }
     
@@ -129,19 +129,48 @@ export default class FlowCanvas {
         }
     }
 
+    printBorder(){
+        let ratio = this.width / this.height;
+        let k = Math.ceil(10 * ratio);
+        this.ctx.beginPath();
+        for(let i = 1; i < Math.floor(this.width / 10); i ++)
+        {
+            this.ctx.moveTo(i * 10, 0);
+            this.ctx.lineTo(i * 10, this.height);
+        }
+        for(let i = 1; i < Math.floor(this.height / k); i ++)
+        {
+            this.ctx.moveTo(0, i * k);
+            this.ctx.lineTo(this.width, i * k);
+        }
+        this.ctx.strokeStyle = "#cccccc"
+        this.ctx.stroke();
+    }
+
     print() : Promise<void> {
         return new Promise<void>((resolve)=>{
+
+            this.printBorder()
+
             if(this.nodes) 
                 this.nodes
-                    .forEach(item=> item.print());
+                    .forEach(item=> {
+                        this.ctx.strokeStyle = item.strokeStyle;
+                        item.print()
+                    });
 
             if(this.connectLines) 
                 this.connectLines
-                    .forEach(item=> item.print());
+                    .forEach(item=> {
+                        this.ctx.strokeStyle = item.strokeStyle;
+                        item.print()
+                    });
 
+                    
             resolve();
         });
     }
+
 
     clear() : Promise<void>{
         return new Promise<void>((resolve)=>{
@@ -165,8 +194,8 @@ export default class FlowCanvas {
 
     createNode(type: string) : Promise<IItem>{
         return new Promise((resolve)=>{
-            let x = 15;
-            let y = 15;
+            let x = 10;
+            let y = 10;
             let width = 50;
             let height = 50;
             if(this.nodes){
@@ -191,6 +220,8 @@ export default class FlowCanvas {
                 node = new Ellipse(this.ctx, id, x, y, width, height)
             else if(type === 'Terminator')
                 node = new Terminator(this.ctx, id, x, y, width, height)
+            else if(type === 'Triangle')
+                node = new Triangle(this.ctx, id, x, y, width, height)
             else 
                 node = new Rect(this.ctx, id, x, y, width, height)
 

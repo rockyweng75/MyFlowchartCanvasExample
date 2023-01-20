@@ -5,6 +5,7 @@ export default class ConnectLine{
     node1 : IItem;
     node2 : IItem;
     width : number;
+    strokeStyle: string = "#000000";
     constructor(ctx, node1, node2, width){
         this.ctx = ctx;
         this.node1 = node1;

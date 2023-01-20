@@ -1,5 +1,5 @@
 import './style.css'
-import FlowCanvas from '../lib/flow'
+import { FlowCanvas } from '../lib/main'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
@@ -38,10 +38,14 @@ async function init (){
   
   let node7 = await canvas.createNode('Terminator');
   node7.text = '7'
-  // canvas.createConnectLine(node1, node2)
-  // canvas.createConnectLine(node2, node3)
-  // canvas.createConnectLine(node3, node4)
-  // canvas.createConnectLine(node4, node5)
+
+  let node8 = await canvas.createNode('Triangle');
+  node8.text = '8'
+  
+  canvas.createConnectLine(node1, node2)
+  canvas.createConnectLine(node2, node3)
+  canvas.createConnectLine(node3, node4)
+  canvas.createConnectLine(node4, node5)
   
   canvas.print()
 }

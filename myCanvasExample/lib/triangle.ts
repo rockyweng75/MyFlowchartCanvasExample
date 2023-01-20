@@ -1,15 +1,19 @@
 import Item from "./item";
 
-export default class Diamond extends Item{
+export default class Triangle extends Item{
+
+    angle: number = 180;
 
     print(){
-        this.ctx!.beginPath();
-        this.ctx!.moveTo(this.x + this.width / 2, this.y);
-        this.ctx!.lineTo(this.x, this.y + this.height / 2);
-        this.ctx!.lineTo(this.x + this.width / 2, this.y + this.height);
-        this.ctx!.lineTo(this.x + this.width, this.y + this.height / 2);
-        this.ctx!.lineTo(this.x + this.width / 2, this.y);
-        this.ctx?.stroke();
+
+        if(this.angle === 180){
+            this.ctx!.beginPath();
+            this.ctx!.moveTo(this.x + this.width / 2, this.y);
+            this.ctx!.lineTo(this.x, this.y + this.height);
+            this.ctx!.lineTo(this.x + this.width, this.y + this.height);
+            this.ctx!.closePath();
+            this.ctx?.stroke();
+        }
 
         if(this.text){
             this.ctx!.font = "14px Arial";
@@ -28,7 +32,7 @@ export default class Diamond extends Item{
             return false;
         }
 
-        if( mouseY < this.y + this.height / 2 
+        if( mouseY < this.y + this.height
             && mouseY - this.y >= 0
             && mouseX >= this.x + this.width / 2 - (mouseY - this.y)
             && mouseX <= this.x + this.width / 2 + (mouseY - this.y)
@@ -36,13 +40,13 @@ export default class Diamond extends Item{
             return true
         } 
 
-        if( mouseY > this.y + this.height / 2 
-            && mouseY - this.y >= 0
-            && mouseX >= this.x + (mouseY - this.y - this.height / 2)
-            && mouseX <= this.x + this.width - (mouseY - this.y - this.height / 2)
-        ) {
-            return true
-        } 
+        // if( mouseY > this.y + this.height / 2 
+        //     && mouseY - this.y >= 0
+        //     && mouseX >= this.x + (mouseY - this.y - this.height / 2)
+        //     && mouseX <= this.x + this.width - (mouseY - this.y - this.height / 2)
+        // ) {
+        //     return true
+        // } 
 
         if(mouseY === this.y + this.height / 2 
             && mouseX >= this.x
@@ -52,5 +56,4 @@ export default class Diamond extends Item{
         } 
         return false
     }
-
 }

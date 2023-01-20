@@ -8,6 +8,7 @@ export default interface IItem {
     height : number;
     text: string;
     id: string | number;
+    strokeStyle: string;
 
     isInside (mouseX, mouseY)
 

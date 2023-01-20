@@ -16,5 +16,5 @@
     "noImplicitReturns": true,
     "skipLibCheck": true
   },
-  "include": ["src", "lib/flow.ts", "lib/flow.ts"]
+  "include": ["src", "lib/flowCanvas.ts", "lib/flowCanvas.ts"]
 }
