@@ -1,7 +1,7 @@
-import Piece from './piece'
+import DiagonallyPiece from './diagonallyPiece'
 import MovePoint from './movepoint';
 import Coordinate from './coordinate'
-export default class Shi extends Piece {
+export default class Shi extends DiagonallyPiece {
     constructor(
         ctx: CanvasRenderingContext2D, 
         id: number | string, 

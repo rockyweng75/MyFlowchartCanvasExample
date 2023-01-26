@@ -1,7 +1,8 @@
 import IItem from './iItem'
 import Coordinate from './coordinate'
 import MovePoint from './movepoint'
-export default abstract class Piece implements IItem {
+import IMove from './imove'
+export default abstract class Piece implements IItem, IMove {
     triangleAngle : number = 5;
     triangleWidth : number = 0;
     ctx: CanvasRenderingContext2D;
@@ -36,6 +37,7 @@ export default abstract class Piece implements IItem {
         this.triangleWidth = r * Math.cos(this.triangleAngle) * -1;
         this.faction = faction;
     }
+
 
     isInside (mouseX: number, mouseY: number) : boolean {
         
@@ -115,7 +117,6 @@ export default abstract class Piece implements IItem {
     focus(bool: boolean): MovePoint[] {
         this.isFocus = bool;
         if(bool){
-            console.log('init')
             return this.initMovePoint();
         } else {
             return []
@@ -123,4 +124,7 @@ export default abstract class Piece implements IItem {
     }
 
     abstract initMovePoint() : MovePoint[]
+
+    abstract decidePoint(points: MovePoint[], allItems: IItem[]): MovePoint[];
+
 }

@@ -1,7 +1,7 @@
-import Piece from './piece'
+import StraightPiece from './straightPiece'
 import MovePoint from './movepoint';
 import Coordinate from './coordinate'
-export default class Chariot extends Piece {
+export default class Chariot extends StraightPiece {
     constructor(
         ctx: CanvasRenderingContext2D, 
         id: number | string, 

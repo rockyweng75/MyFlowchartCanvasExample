@@ -30,6 +30,7 @@ export default class Action {
     columnY: number = 9;
     columnWidth: number = 0;
     columnHeight: number = 0;
+    currnetFaction: string = "black";
     isDown = false;
     isDrop = false;
     isMove = false;
@@ -39,7 +40,8 @@ export default class Action {
     $confirm: Confirm | null = null;
     static Xids: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
     oncommit: Function | undefined;
-
+    removeItem : IItem | undefined = undefined;
+    
     constructor(canvas : HTMLCanvasElement){
         this.width = canvas.width - Action.originX * 2;
         this.height = canvas.height - Action.originY * 2;
@@ -96,12 +98,14 @@ export default class Action {
             // this.isMove = false;
 
             this.items.forEach(item =>{
-                if(item.isInside(this.startX, this.startY)){
+                if(item.isInside(this.startX, this.startY) && item.faction === this.currnetFaction){
                     if(this.selectedItem !== null && this.selectedItem!.id === item.id){
                         this.movePoints = item.focus(false);
                         this.selectedItem = null;
                     } else {
                         this.movePoints = item.focus(true);
+                        // let obstacles= this.items.filter(o => this.movePoints.some(m => m.coordinate.cid === o.coordinate!.cid));
+                        this.movePoints = item.decidePoint(this.movePoints, this.items);
                         this.selectedItem = item;
                     }
                     isReload = true;
@@ -110,25 +114,33 @@ export default class Action {
                 }
             });
 
-            this.movePoints.forEach(item =>{
-                if(item.isInside(this.startX, this.startY)){
-                    this.isMove = true;
-                    let newCid = item.coordinate.clone(0, 0)!;
-                    this.movePoints = []
-                    this.movePoints.push(new MovePoint(
-                        this.ctx!,
-                        this.selectedItem!.coordinate!,
-                        this.selectedItem!.width,
-                        this.selectedItem!.height)
-                    )
-                    this.selectedItem!.move(newCid);
+            if(this.movePoints)
+                this.movePoints.forEach(item =>{
+                    if(item.isInside(this.startX, this.startY)){
+                        this.isMove = true;
+                        let newCid = item.coordinate.clone(0, 0)!;
+                        this.movePoints = []
+                        this.movePoints.push(new MovePoint(
+                            this.ctx!,
+                            this.selectedItem!.coordinate!,
+                            this.selectedItem!.width,
+                            this.selectedItem!.height)
+                        )
+                        if(item.isTarget){
+                            for(let i = 0; i < this.items.length; i++){
+                                if(this.items[i].coordinate?.cid === item.cid){
+                                    this.removeItem = this.items.splice(i, 1)[0];
+                                }
+                            }                        
+                        }   
+                        this.selectedItem!.move(newCid);
 
-                    let id = Date.now().toFixed();
-                    this.$confirm = new Confirm(this.ctx!, id, this.width/3, this.height/2, 200, 60, 
-                        this.commit(), 
-                        this.rollback());
-                } 
-            })
+                        let id = Date.now().toFixed();
+                        this.$confirm = new Confirm(this.ctx!, id, this.width/3, this.height/2, 200, 60, 
+                            this.commit(), 
+                            this.rollback());
+                    } 
+                })
 
             
             if(this.isMove){
@@ -142,10 +154,6 @@ export default class Action {
             }
 
         }
-
-
-
-   
 
         this.isDown = true;
 
@@ -273,10 +281,16 @@ export default class Action {
                         item.print()
                     });
 
-            if(this.movePoints) 
-                this.movePoints.forEach(item =>{
-                    item.print();
+            if(this.movePoints) {
+                this.movePoints.forEach(item=> {
+                    if(!item.isBlock){
+                        item.print();
+                    } else if(item.isTarget){
+                        item.isTarget = true;
+                        item.print2();
+                    }
                 })
+            }
 
             if(this.isMove && this.$confirm){
                 this.$confirm!.print();
@@ -440,14 +454,14 @@ export default class Action {
 
     commit(): Function{
         return () =>{
-            console.log('commit')
             let oldCid = this.movePoints[0].cid;
             let newCid = this.selectedItem?.coordinate?.cid;
             this.movePoints = this.selectedItem!.focus(false);
             this.$confirm = null;
             this.isMove = false;
             this.isDown = false;
-
+            this.currnetFaction = this.currnetFaction === "black" ? "red" : "black";
+            this.removeItem = undefined;
             if(this.oncommit){
                 this.oncommit({ id: this.selectedItem?.id, newCid: newCid, oldCid: oldCid});
             }
@@ -460,6 +474,8 @@ export default class Action {
             this.movePoints = this.selectedItem!.focus(true);
             this.$confirm = null;
             this.isMove = false;
+            this.items.push(this.removeItem!);
+            this.removeItem = undefined;
         }
 
     }

@@ -2,9 +2,9 @@ import IMove from './imove';
 import IItem from './iItem';
 import Piece from './piece';
 import MovePoint from './movepoint';
-export default abstract class HorsePiece extends Piece implements IMove{
+export default abstract class DiagonallyPiece extends Piece implements IMove{
 
-    decidePoint(points: MovePoint[], allItems: IItem[]):  MovePoint[] {
+    decidePoint(points: MovePoint[], allItems: IItem[]): MovePoint[] {
 
         let obstacles= allItems.filter(o => points.some(m => m.coordinate.cid === o.coordinate!.cid));
 

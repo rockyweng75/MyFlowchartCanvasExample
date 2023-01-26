@@ -1,7 +1,8 @@
-import Piece from './piece'
+import StraightPiece from './straightPiece'
 import Coordinate from './coordinate'
 import MovePoint from './movepoint';
-export default class King extends Piece {
+import IItem from './iItem';
+export default class King extends StraightPiece {
     constructor(
         ctx: CanvasRenderingContext2D, 
         id: number | string, 
@@ -45,5 +46,21 @@ export default class King extends Piece {
         }
 
         return movePoints;
+    }
+
+    decidePoint(points: MovePoint[], allItems: IItem[]): MovePoint[]{
+        super.decidePoint(points, allItems);
+
+        let items = allItems.filter(o => o.coordinate!.cx === this.coordinate.cx);
+        if(items.length == 2 && items.every(o => King.prototype.isPrototypeOf(o))){
+            let target = items.find(o => o.coordinate!.cid !== this.coordinate.cid);
+            let targetCid = target?.coordinate?.clone(0, 0);
+            let targetPoint = new MovePoint(this.ctx, targetCid!, target!.width, target!.height);
+            targetPoint.isBlock = true;
+            targetPoint.isTarget = true;
+            points.push(targetPoint)
+        }
+
+        return points
     }
 }

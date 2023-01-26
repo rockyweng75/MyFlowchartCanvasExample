@@ -1,6 +1,8 @@
 import MovePoint from "./movepoint";
 import Coordinate from "./coordinate"
-export default interface IItem {
+import IMove from "./imove"
+
+export default interface IItem extends IMove {
     ctx : CanvasRenderingContext2D | null;
     x: number;
     y: number;
@@ -11,6 +13,7 @@ export default interface IItem {
     id: string | number;
     strokeStyle: string;
     isFocus: boolean;
+    faction: string;
 
     isInside (mouseX: number, mouseY: number) : boolean
 
@@ -23,4 +26,5 @@ export default interface IItem {
     isOverlapping(x: number, y: number, width: number, height: number) : boolean
 
     focus(bool: boolean): MovePoint [] 
+
 }

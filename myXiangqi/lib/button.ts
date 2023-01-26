@@ -1,7 +1,7 @@
 import Coordinate from "./coordinate"
 import MovePoint from './movepoint';
 import IItem from "./iItem";
-export default class button implements IItem {
+export default class Button implements IItem {
     ctx : CanvasRenderingContext2D | null;
     x: number;
     y: number;
@@ -14,6 +14,7 @@ export default class button implements IItem {
     isFocus: boolean = false;
     color: string;
     click: Function;
+    faction: string = "";
 
     constructor(
         ctx: CanvasRenderingContext2D, 
@@ -35,6 +36,13 @@ export default class button implements IItem {
         this.text = text;
         this.color = color;
         this.click = click;
+    }
+    
+    block(point1: Coordinate, obstacles: Coordinate[]): boolean {
+        throw new Error("Method not implemented.");
+    }
+    decidePoint(points: MovePoint[], allItems: IItem[]): MovePoint[] {
+        throw new Error("Method not implemented.");
     }
 
     isInside (mouseX: number, mouseY: number) : boolean{

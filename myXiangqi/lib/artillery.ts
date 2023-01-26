@@ -1,7 +1,7 @@
-import Piece from './piece'
+import JumpPiece from './jumpPiece'
 import MovePoint from './movepoint';
 import Coordinate from './coordinate'
-export default class Artillery extends Piece {
+export default class Artillery extends JumpPiece {
     constructor(
         ctx: CanvasRenderingContext2D, 
         id: number | string, 

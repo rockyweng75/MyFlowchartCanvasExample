@@ -1,6 +1,5 @@
 import Coordinate from './coordinate'
-import IItem from './iItem';
-export default class MovePoint implements IItem{
+export default class MovePoint{
     triangleAngle : number = 5;
     triangleWidth : number = 0;
     ctx: CanvasRenderingContext2D;
@@ -15,6 +14,9 @@ export default class MovePoint implements IItem{
     text: string = "";
     id: string | number = Date.now().toFixed();
     isFocus: boolean = false;
+    faction: string = "";
+    isTarget: boolean = false;
+    isBlock: boolean = false;
 
     constructor(        
         ctx: CanvasRenderingContext2D,
@@ -31,21 +33,7 @@ export default class MovePoint implements IItem{
         this.height = height;
     }
 
-    move(coordinate: Coordinate): void {
-        throw new Error('Method not implemented.');
-    }
-    resize(newWidth: number, newHeight: number): void {
-        throw new Error('Method not implemented.');
-    }
-    isOverlapping(x: number, y: number, width: number, height: number): boolean {
-        throw new Error('Method not implemented.');
-    }
-    focus(bool: boolean): MovePoint[] {
-        throw new Error('Method not implemented.');
-    }
-
     print(){
-
         this.ctx.save();
         this.ctx.translate(this.x, this.y)
         this.ctx!.beginPath();
@@ -58,6 +46,20 @@ export default class MovePoint implements IItem{
         this.ctx!.fillStyle = "gainsboro";
 
         this.ctx!.fill();
+        this.ctx!.restore();
+    }
+
+    print2(){
+        this.ctx.save();
+        this.ctx.translate(this.x, this.y)
+        this.ctx!.beginPath();
+        this.ctx!.arc(0, 0, this.width /2 + 5, 0, 2 * Math.PI);
+        this.ctx!.lineWidth = 5
+
+        this.ctx!.strokeStyle = "red";
+        this.ctx?.stroke();
+        // this.ctx!.fillStyle = "gainsboro";
+        // this.ctx!.fill();
         this.ctx!.restore();
     }
 
@@ -75,6 +77,4 @@ export default class MovePoint implements IItem{
         }
         return false
     }
-
-
 }

@@ -1,7 +1,7 @@
-import Piece from './piece'
+import DiagonallyPiece from './diagonallyPiece'
 import MovePoint from './movepoint';
 import Coordinate from './coordinate'
-export default class Siang extends Piece {
+export default class Siang extends DiagonallyPiece {
     constructor(
         ctx: CanvasRenderingContext2D, 
         id: number | string, 
@@ -38,4 +38,42 @@ export default class Siang extends Piece {
         }
         return movePoints;
     }
+
+    block(point1: Coordinate, obstacles: Coordinate[]): boolean {
+        let result = false;
+        obstacles.forEach(obstacle => {
+            // 垂直
+            if(this.coordinate.cx === obstacle.cx && this.coordinate.cx === point1.cx){
+                //往下
+                if(this.coordinate.cy > obstacle.cy){
+                    if(point1.cy <= obstacle.cy){
+                        result = true;
+                        return;
+                    }
+                } else {
+                    if(point1.cy >= obstacle.cy){
+                        result = true;
+                        return;
+                    }
+                }
+            } else if(this.coordinate.cy === obstacle.cy && this.coordinate.cy === point1.cy) {
+                //左
+                if(this.coordinate.cx > obstacle.cx){
+                    if(point1.cx <= obstacle.cx){
+                        result = true;
+                        return;
+                    }
+                } else {
+                    if(point1.cx >= obstacle.cx){
+                        result = true;
+                        return;
+
+                    }
+                }
+            }
+        })
+
+        return result;
+    }
+
 }
